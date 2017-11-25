@@ -18,7 +18,7 @@ function debugLog(text)
 	debugTime = newTime - startTime
 	print('['..round(debugTime, 4)..']' .. "\t" .. text)
 end
- 
+
 function debugDrawMousePos(mx, my)
 	if mx == nil then mx = 0 end
 	if my == nil then my = 0 end

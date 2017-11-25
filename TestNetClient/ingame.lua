@@ -41,35 +41,50 @@ if transitioned then
 	end
 
 	if love.keyboard.isDown("up") then
-		playerInfo.y = playerInfo.y - 10
+		playerInfo.y = playerInfo.y - 20
 	end
 	if love.keyboard.isDown("down") then
-		playerInfo.y = playerInfo.y + 10
+		playerInfo.y = playerInfo.y + 20
 	end
 	if love.keyboard.isDown("left") then
-		playerInfo.x = playerInfo.x - 10
+		playerInfo.x = playerInfo.x - 20
 	end
 	if love.keyboard.isDown("right") then
-		playerInfo.x = playerInfo.x + 10
+		playerInfo.x = playerInfo.x + 20
+	end
+
+	if playerReceivedInfo then
+		for i, v in ipairs(oldWorldGameInfo) do
+			if(worldGameInfo[i] ~= nil) then
+				v.x = lerp(v.x, worldGameInfo[i].x, 0.302)
+				v.y = lerp(v.y, worldGameInfo[i].y, 0.302)
+				--if(v.x >= worldGameInfo[i].x) then v.x = v.x-(dt*1000) else v.x = v.x + (dt*1000) end
+				--if(v.y >= worldGameInfo[i].y) then v.y = v.y-(dt*1000) else v.y = v.y +(dt*1000) end
+			end
+		end
 	end
 
 else transitionScreen(dt) end
 end
 
 function ingame.draw()
-	suit.draw()
+
 	push:apply("start")
 	if playerReceivedInfo then
-		for i, v in ipairs(worldGameInfo) do
-			love.graphics.setColor(v.r, v.g, v.b)
+		for i, v in ipairs(oldWorldGameInfo) do
+			love.graphics.setColor(v.r, v.g, v.b, 255)
 			love.graphics.draw(playerImage, v.x, v.y)
 		end
 
-		love.graphics.setColor(playerInfo.r, playerInfo.g, playerInfo.b)
+
+
+		love.graphics.setColor(playerInfo.r, playerInfo.g, playerInfo.b, 50)
 		love.graphics.draw(playerImage, playerInfo.x, playerInfo.y)
 	end
 	push:apply("end")
-
+	suit.draw()
+	love.graphics.setColor(0, 255, 0, 255)
+	love.graphics.print("Ping: "..client:getRoundTripTime().."ms", actualWindowsResX*0.93, 20)
 end
 
 function ingame.dispose()

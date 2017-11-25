@@ -8,6 +8,7 @@ gameConnecting = false
 playerInfo = {}
 playerReceivedInfo = false
 worldGameInfo = {}
+oldWorldGameInfo = {}
 
 function network.createClient()
   client = sock.newClient("192.168.0.104", 22122)
@@ -27,10 +28,10 @@ function network.createClient()
 		gameConnected = false
     end)
 
-	client:on("serverDebugInfo", function(data)
-		if data ~= nil then
-			debugLog("Server message: "..data)
-		end
+	  client:on("serverDebugInfo", function(data)
+		  if data ~= nil then
+			 debugLog("Server message: "..data)
+		 end
 	end)
 
 
@@ -43,12 +44,19 @@ function network.createClient()
 	client:on("playerTile", function(data)
 		playerInfo = data[1] --Player's own information
 		worldGameInfo = data[2] --Other connected players informations
+    oldWorldGameInfo = data[2]
 		playerReceivedInfo = true
 		debugLog("Received initial server informations.")
 	end)
 
+  client:on("newPlayer", function(data)
+    oldWorldGameInfo = data
+    worldGameInfo = data
+    table.insert(logLines, "A new player has entered the fray!")
+  end)
+
 	client:on("globalUpdate", function(data)
-		worldGameInfo = data
+    worldGameInfo = data
 		client:send("playerUpdate", playerInfo)
 	end)
 

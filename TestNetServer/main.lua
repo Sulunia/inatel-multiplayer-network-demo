@@ -7,8 +7,10 @@ function love.load()
 	server = sock.newServer("*", 22122)
 	print("SERVER WINDOW")
 	ticks = 0
+	tickRate = 0
 	blocks = {}
-	tickGlobal = 50
+	tickGlobal = 10
+	count = 0
 
     -- Called when someone connects to the server
     server:on("connect", function(data, client)
@@ -19,8 +21,8 @@ function love.load()
 				b = love.math.random(255)
 
 				clientId = client:getIndex()
-				server:sendToPeer(server:getPeerByIndex(clientId), "playerTile", {newBlock(r, g, b, clientId), blocks})
 				table.insert(blocks, newBlock(r, g, b, clientId))
+				server:sendToPeer(server:getPeerByIndex(clientId), "playerTile", {newBlock(r, g, b, clientId), blocks})
     end)
 
 		server:on("disconnect", function(data, client)
@@ -57,13 +59,16 @@ function love.load()
 end
 
 function love.update(dt)
+		count = count + (dt*1000)
     if (ticks % tickGlobal == 0) then
 		server:sendToAll("globalUpdate", blocks)
-		--print("Client sync! Tick "..ticks)
+		tickRate = tickRate + 1
 	end
 	server:update()
-	if ticks % 3600 == 0 then
-		print("Total data sent: "..server:getTotalSentData()/1024)
+	if count >= 1000 then
+		print("Total data sent: "..(server:getTotalSentData()/1024).." // Ticks per second: "..tickRate)
+		tickRate = 0
+		count = 0
 	end
 	ticks = ticks + 1
 end
