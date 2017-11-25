@@ -8,7 +8,7 @@ function love.load()
 	print("SERVER WINDOW")
 	ticks = 0
 	blocks = {}
-	tickGlobal = 130
+	tickGlobal = 50
 
     -- Called when someone connects to the server
     server:on("connect", function(data, client)
@@ -41,30 +41,19 @@ function love.load()
 			print("Client id "..client:getIndex().." has disconnected")
 		end)
 
-		server:on("move", function(info, client)
+		server:on("playerUpdate", function(info, client)
 			peerPos = client:getIndex()
 			for i, v in ipairs(blocks) do
 				if blocks[i].id == client:getIndex() then
-					peerPos = i
+					blocks[i] = info
 				end
-			end
-
-			if info.typeM == 1 then
-				blocks[peerPos].y = info.mov
-			elseif info.typeM == 2 then
-				blocks[peerPos].y = info.mov
-			elseif info.typeM == 3 then
-				blocks[peerPos].x = info.mov
-			elseif info.typeM == 4 then
-				blocks[peerPos].x = info.mov
-			else
-				print("Unknown movement type!")
 			end
 		end)
 
 		server:on("newChatMessage", function(data, client)
 			server:sendToAll("receiveChatMsg", "[Player "..client:getIndex().."]: "..data)
 		end)
+
 end
 
 function love.update(dt)
