@@ -10,8 +10,8 @@ playerReceivedInfo = false
 worldGameInfo = {}
 
 function network.createClient()
-    client = sock.newClient("localhost", 22122)
-	--client = sock.newClient("192.168.0.101", 22122)
+  client = sock.newClient("192.168.0.104", 22122)
+	--client = sock.newClient("localhost", 22122)
 
 	--      >>>>> General Library Events
 	-- Called when a connection is made to the server
@@ -19,39 +19,39 @@ function network.createClient()
         debugLog("Client connected to the server.")
 		gameConnected = true
     end)
-	
+
     -- Called when the client disconnects from the server
     client:on("disconnect", function(data)
         debugLog("Client disconnected from the server.")
 		gameConnecting = false
 		gameConnected = false
     end)
-	
+
 	client:on("serverDebugInfo", function(data)
 		if data ~= nil then
 			debugLog("Server message: "..data)
 		end
 	end)
-	
-	
+
+
 	-- Game Specific Events
 	client:on("receiveChatMsg", function(data)
 		if data == nil then data = "" end
 		table.insert(logLines, data)
 	end)
-	
+
 	client:on("playerTile", function(data)
 		playerInfo = data[1] --Player's own information
 		worldGameInfo = data[2] --Other connected players informations
 		playerReceivedInfo = true
 		debugLog("Received initial server informations.")
 	end)
-	
+
 	client:on("globalUpdate", function(data)
 		worldGameInfo = data
 		client:send("playerUpdate", playerInfo)
 	end)
-	
+
 end
 
 function network.connectToServer()

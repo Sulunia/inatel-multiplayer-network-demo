@@ -12,14 +12,14 @@ function ingame.load()
 	playerImage = love.graphics.newImage("gfx/swang5.png")
 	--Variables
 	transitionVar = 255
-	transitioned = false	
+	transitioned = false
 end
 
 function ingame.update(dt)
 if transitioned then
 	--Game Loop
 	--Ingame Chat (this should be moved to outside of ingame resolution handling)
-	
+
 	chatInput = suit.Input(input, 20, actualWindowsResY-60, actualWindowsResX*0.23, 40)
 	chatBox = suit.Label(chatText, {id = "chatBox", align = "left"}, 20, actualWindowsResY-180, 500, 60)
 	chatText = ""
@@ -34,12 +34,12 @@ if transitioned then
 	while #logLines >= 7 do
 		table.remove(logLines, 1)
 	end
-	
+
 	--Concatenate all strings in a single block
 	for i, v in ipairs(logLines) do
 		chatText = chatText..v
 	end
-	
+
 	if love.keyboard.isDown("up") then
 		playerInfo.y = playerInfo.y - 10
 	end
@@ -52,7 +52,7 @@ if transitioned then
 	if love.keyboard.isDown("right") then
 		playerInfo.x = playerInfo.x + 10
 	end
-	
+
 else transitionScreen(dt) end
 end
 
@@ -64,12 +64,12 @@ function ingame.draw()
 			love.graphics.setColor(v.r, v.g, v.b)
 			love.graphics.draw(playerImage, v.x, v.y)
 		end
-		
+
 		love.graphics.setColor(playerInfo.r, playerInfo.g, playerInfo.b)
 		love.graphics.draw(playerImage, playerInfo.x, playerInfo.y)
 	end
 	push:apply("end")
-	
+
 end
 
 function ingame.dispose()

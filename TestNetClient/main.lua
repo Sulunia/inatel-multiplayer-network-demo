@@ -25,15 +25,15 @@ function love.load()
 	debugBeginTimer()
 	screenInit()
 	mainMenu.load()
-	
+
 end
 
 function love.update(dt)
 	require("lovebird").update()
-	if network:state() ~= nil then 
+	if network:state() ~= nil then
 		network:update()
 	end
-	
+
 	if Screen == 0 then
 		mainMenu.update(dt)
 	else
@@ -45,7 +45,7 @@ end
 
 function love.draw()
 	love.graphics.setColor(255, 255, 255)
-	if Screen == 0 then 
+	if Screen == 0 then
 		mainMenu.draw()
 	else
 		ingame.draw()
