@@ -9,7 +9,7 @@ function love.load()
 	ticks = 0
 	tickRate = 0
 	blocks = {}
-	tickGlobal = 10
+	tickGlobal = 23
 	count = 0
 
     -- Called when someone connects to the server
