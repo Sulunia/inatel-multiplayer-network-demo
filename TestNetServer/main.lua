@@ -23,6 +23,7 @@ function love.load()
 				clientId = client:getIndex()
 				table.insert(blocks, newBlock(r, g, b, clientId))
 				server:sendToPeer(server:getPeerByIndex(clientId), "playerTile", {newBlock(r, g, b, clientId), blocks})
+				server:sendToAll("newPlayer", blocks)
     end)
 
 		server:on("disconnect", function(data, client)
@@ -39,7 +40,7 @@ function love.load()
 					break
 				end
 			end
-			server:sendToAll("newPlayer", blocks)
+			server:sendToAll("playerLeft", blocks)
 			print("Client id "..client:getIndex().." has disconnected")
 		end)
 

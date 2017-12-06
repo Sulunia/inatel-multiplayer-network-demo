@@ -11,7 +11,7 @@ worldGameInfo = {}
 oldWorldGameInfo = {}
 
 function network.createClient()
-  client = sock.newClient("192.168.0.104", 22122)
+  client = sock.newClient("192.168.0.100", 22122)
 	--client = sock.newClient("localhost", 22122)
 
 	--      >>>>> General Library Events
@@ -23,7 +23,7 @@ function network.createClient()
 
     -- Called when the client disconnects from the server
     client:on("disconnect", function(data)
-        debugLog("Client disconnected from the server.")
+    debugLog("Client disconnected from the server.")
 		gameConnecting = false
 		gameConnected = false
     end)
@@ -52,7 +52,13 @@ function network.createClient()
   client:on("newPlayer", function(data)
     oldWorldGameInfo = data
     worldGameInfo = data
-    table.insert(logLines, "A new player has entered the fray!")
+    table.insert(logLines, "A new player has entered the fray!".."\n")
+  end)
+
+  client:on("playerLeft", function(data)
+    oldWorldGameInfo = data
+    worldGameInfo = data
+    table.insert(logLines, "Player left!".."\n")
   end)
 
 	client:on("globalUpdate", function(data)

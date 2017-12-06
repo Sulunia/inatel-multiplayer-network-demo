@@ -76,10 +76,8 @@ function ingame.draw()
 			love.graphics.draw(playerImage, v.x, v.y)
 		end
 
-
-
-		love.graphics.setColor(playerInfo.r, playerInfo.g, playerInfo.b, 50)
-		love.graphics.draw(playerImage, playerInfo.x, playerInfo.y)
+		--love.graphics.setColor(playerInfo.r, playerInfo.g, playerInfo.b, 50)
+		--love.graphics.draw(playerImage, playerInfo.x, playerInfo.y)
 	end
 	push:apply("end")
 	suit.draw()
